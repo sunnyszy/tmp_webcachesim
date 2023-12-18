@@ -181,8 +181,11 @@ public:
 };
 
 
+// template<typename KeyType>
 class InCacheMeta : public Meta {
 public:
+    // typedef Key
+    // typedef KeyType key_t;
     //pointer to lru0
     list<int64_t>::const_iterator p_last_request;
     //any change to functions?
@@ -194,7 +197,7 @@ public:
                 const uint64_t &past_timestamp,
                 const vector<uint16_t> &extra_features,
                 const uint64_t &future_timestamp,
-                const list<KeyT>::const_iterator &it) :
+                const list<int64_t>::const_iterator &it) :
             Meta(key, size, past_timestamp, extra_features, future_timestamp) {
         p_last_request = it;
     };
@@ -202,7 +205,8 @@ public:
     InCacheMeta(const uint64_t &key,
                 const uint64_t &size,
                 const uint64_t &past_timestamp,
-                const vector<uint16_t> &extra_features, const list<int64_t>::const_iterator &it) :
+                const vector<uint16_t> &extra_features,
+		const list<int64_t>::const_iterator &it) :
             Meta(key, size, past_timestamp, extra_features) {
         p_last_request = it;
     };
@@ -535,6 +539,8 @@ public:
     vector<int64_t> near_bytes;
     vector<int64_t> middle_bytes;
     vector<int64_t> far_bytes;
+    uint64_t n_beyond_boundary = 0;
+    uint64_t n_evictions = 0;
 #endif
 
     void init_with_params(const map<string, string> &params) override {
@@ -746,6 +752,14 @@ public:
         doc.append(kvp("far_bytes", [this](sub_array child) {
             for (const auto &element : far_bytes)
                 child.append(element);
+        }));
+        doc.append(kvp("n_evictions", [this](sub_array child) {
+            //for (const auto &element : n_evictions)
+                child.append((int64_t) n_evictions);
+        }));
+        doc.append(kvp("n_beyond_boundary", [this](sub_array child) {
+            //for (const auto &element : n_beyond_boundary)
+                child.append((int64_t) n_beyond_boundary);
         }));
         try {
             mongocxx::client client = mongocxx::client{mongocxx::uri(dburi)};

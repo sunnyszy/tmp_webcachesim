@@ -272,6 +272,7 @@ bsoncxx::builder::basic::document FrameWork::simulation_results() {
         for (const auto &element : rt_seg_byte_req)
             child.append(element);
     }));
+    
     value_builder.append(kvp("real_time_segment_object_miss", [this](sub_array child) {
         for (const auto &element : rt_seg_object_miss)
             child.append(element);
@@ -280,10 +281,12 @@ bsoncxx::builder::basic::document FrameWork::simulation_results() {
         for (const auto &element : rt_seg_object_req)
             child.append(element);
     }));
+    
     value_builder.append(kvp("real_time_segment_rss", [this](sub_array child) {
         for (const auto &element : rt_seg_rss)
             child.append(element);
     }));
+    
 
     webcache->update_stat(value_builder);
     return value_builder;

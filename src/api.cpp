@@ -10,6 +10,7 @@
 using namespace webcachesim;
 
 Interface::Interface(const string &cache_type, const uint64_t &cache_size, const map<string, string> &params) {
+    // webcachesim.mime_field = "X-extra-fields: ";
     string webcachesim_cache_type;
     if (cache_type == "LRU") {
         webcachesim_cache_type = "ParallelLRU";
