@@ -39,7 +39,7 @@ set(LIB_SOURCE
         caches/ucb.cpp
         ${WEBCACHESIM_HEADER_DIR}/caches/belady_sample.h
         caches/belady_sample.cpp
-        ${WEBCACHESIM_HEADER_DIR}/caches/lrb.h
+        ${WEBCACHESIM_HEADER_DIR}/caches/lrb.hpp
         caches/lrb.cpp
         ${WEBCACHESIM_HEADER_DIR}/caches/hyperbolic.h
         caches/hyperbolic.cpp

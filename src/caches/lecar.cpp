@@ -9,7 +9,7 @@ bool LeCaRCache::lookup(const SimpleRequest &req)
 
 #ifdef EVICTION_LOGGING
     {
-        auto &_req = dynamic_cast<AnnotatedRequest &>(req);
+        const auto &_req = dynamic_cast<const AnnotatedRequest &>(req);
         current_t = req.seq;
         auto it = future_timestamps.find(req.id);
         if (it == future_timestamps.end()) {

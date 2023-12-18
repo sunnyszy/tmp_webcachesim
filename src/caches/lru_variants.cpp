@@ -28,7 +28,7 @@ bool LRUCache::lookup(const SimpleRequest &req)
 
 #ifdef EVICTION_LOGGING
     {
-        auto &_req = dynamic_cast<AnnotatedRequest &>(req);
+        const auto &_req = dynamic_cast<const AnnotatedRequest &>(req);
         current_t = req.seq;
 
         if (_cacheMap.find(req.id) != _cacheMap.end()) {

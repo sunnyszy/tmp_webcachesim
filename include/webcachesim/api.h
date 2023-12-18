@@ -5,12 +5,15 @@
 #ifndef WEBCACHESIM_API_H
 #define WEBCACHESIM_API_H
 
+#include <stdint.h>
+#include <cstdint>
 #include <memory>
 #include <map>
+#include <sys/types.h>
 
 namespace webcachesim {
     const uint max_n_extra_feature = 4;
-    static const std::string mime_field = "X-extra-fields: ";
+    const char * const mime_field = "X-extra-fields: ";
 
     class ParallelCache;
 

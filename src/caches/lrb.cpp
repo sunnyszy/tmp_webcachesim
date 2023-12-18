@@ -2,7 +2,7 @@
 // Created by zhenyus on 1/16/19.
 //
 
-#include "lrb.h"
+#include "lrb.hpp"
 #include <algorithm>
 #include "utils.h"
 #include <chrono>
@@ -152,11 +152,11 @@ bool LRBCache::lookup(const SimpleRequest &req) {
 #ifdef EVICTION_LOGGING
     {
         AnnotatedRequest *_req = (AnnotatedRequest *) &req;
-        auto it = future_timestamps.find(_req->_id);
+        auto it = future_timestamps.find(_req->id);
         if (it == future_timestamps.end()) {
-            future_timestamps.insert({_req->_id, _req->_next_seq});
+            future_timestamps.insert({_req->id, _req->next_seq});
         } else {
-            it->second = _req->_next_seq;
+            it->second = _req->next_seq;
         }
     }
 #endif
@@ -214,7 +214,7 @@ bool LRBCache::lookup(const SimpleRequest &req) {
         //make this update after update training, otherwise the last timestamp will change
 #ifdef EVICTION_LOGGING
         AnnotatedRequest *_req = (AnnotatedRequest *) &req;
-        meta.update(current_seq, _req->_next_seq);
+        meta.update(current_seq, _req->next_seq);
 #else
         meta.update(current_seq);
 #endif
@@ -316,7 +316,7 @@ void LRBCache::admit(const SimpleRequest &req) {
         auto lru_it = in_cache_lru_queue.request(req.id);
 #ifdef EVICTION_LOGGING
         AnnotatedRequest *_req = (AnnotatedRequest *) &req;
-        in_cache_metas.emplace_back(req.id, req.size, current_seq, req.extra_features, _req->_next_seq, lru_it);
+        in_cache_metas.emplace_back(req.id, req.size, current_seq, req.extra_features, _req->next_seq, lru_it);
 #else
         in_cache_metas.emplace_back(req.id, req.size, current_seq, req.extra_features, lru_it);
 #endif
@@ -518,7 +518,8 @@ pair<uint64_t, uint32_t> LRBCache::rank() {
                 uint32_t future_interval = future_timestamps.find(keys[i])->second - current_seq;
                 future_interval = min(2 * memory_window, future_interval);
                 trainings_and_predictions.emplace_back(future_interval);
-                trainings_and_predictions.emplace_back(result[i]);
+                trainings_and_predictions.emplace_back(scores[i]);
+                //trainings_and_predictions.emplace_back(result[i]);
                 trainings_and_predictions.emplace_back(current_seq);
                 trainings_and_predictions.emplace_back(1);
                 trainings_and_predictions.emplace_back(keys[i]);
